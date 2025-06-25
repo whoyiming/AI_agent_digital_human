@@ -1,0 +1,60 @@
+= AN AI AGENT of real-time digital humans
+Author whoyiming <whoyiming@outlook.com>
+:doctype: book
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 3
+:sectnums:
+:sectid:
+:icons: fon
+
+[preface]
+== 引言
+This repo contains notes on the development of AI AGENT real-time digital humans.
+
+== 环境
+=== 安装python3.12及uv库
+=== 安装nodejs, npm install -g next heroui-cli pnpm
+=== 登录 https://www.aliyun.com/product/bailian[百炼平台]，开通模型调用服务
+=== 本地安装ollama，部署模型，详情参考部署文档
+=== apt install ffmpeg
+
+[TIP]
+如果是windows下安装ffmpeg，需要将bin目录装载到环境变量中，项目才能调用到
+
+== ADH
+课程中的项目来自开源项目，老师经过部分修改后的 https://github.com/freecoinx/awesome-digital-human-live2d[项目地址]
+ADH 项目分成后端和前端两部分。后端使用 Python 开发，开发框架是 FastAPI。前端使用 TypeScript 开发，开发框架是 Next.js + React + HeroUI。
+
+后端
+[soruce, terminal]
+----
+git clone https://github.com/freecoinx/awesome-digital-human-live2d.git
+cd awesome-digital-human-live2d
+# 初始化一个 uv 项目
+uv init
+vi pyproject.toml
+[[tool.uv.index]]
+url = "https://pypi.tuna.tsinghua.edu.cn/simple" 
+default = true
+
+添加所有依赖到 uv 创建的虚拟环境
+uv add $(cat requirements.txt)
+
+uv run python main.py
+----
+
+前端
+[soruce, terminal]
+----
+cd awesome-digital-human-live2d/web
+pnpm install
+pnpm run build
+pnpm run dev # 如果没有dev配置文件，直接pnpn run start
+
+----
+
+
+
+
+
