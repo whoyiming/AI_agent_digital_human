@@ -54,7 +54,66 @@ pnpm run dev # 如果没有dev配置文件，直接pnpn run start
 
 ----
 
+== 创建Agent SDK
+=== 用 uv 创建项目与引用
+[soruce, terminal]
+----
+# 用 uv 创建两个项目
+uv init aa
+uv init bb
+
+# 在aa中创建子目录
+mkdir aaa
+vi aatest.py
+def testaa():
+    print("aaa testaa")
+
+# 在bb中引入aaa包
+vi main.py
+
+from aaa.aatest import testaa
+
+def main():
+    print("Hello from bb!")
+    testaa()
+
+if __name__ == "__main__":
+    main()
 
 
+# 在bb目录下链接
+cd bb
+uv add ../aa --dev
+uv pip install -e "../aa"
+
+#运行，可以看到testaa()的输出
+uv run python main.py
+----
+
+[soruce, terminal]
+----
+uv init adh_ai_agent
+cd adh_ai_agent
+
+# 编辑 pyproject.toml
+[[tool.uv.index]]
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+default = true
+
+[build-system]
+requires = ["setuptools>=42"]
+build-backend = "setuptools.build_meta"
+
+# 添加依赖
+uv add openai-agents
+
+mkdir adh_ai_agent
+cd adh_ai_agent
+vi my_agent.py
+
+def test_hello():
+    print("Hello from adh-ai-agent!")
+
+----
 
 
