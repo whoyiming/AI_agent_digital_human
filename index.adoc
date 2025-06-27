@@ -24,11 +24,13 @@ This repo contains notes on the development of AI AGENT real-time digital humans
 
 == ADH
 课程中的项目来自开源项目，老师经过部分修改后的 https://github.com/freecoinx/awesome-digital-human-live2d[项目地址]
-ADH 项目分成后端和前端两部分。后端使用 Python 开发，开发框架是 FastAPI。前端使用 TypeScript 开发，开发框架是 Next.js + React + HeroUI。
+ADH 项目分成后端和前端两部分。后端使用 Python 开发，开发框架是 FastAPI。前端使用 TypeScript 开发，开发框架是 Next.js + React + HeroUI。整个项目在work目录下完成。
 
 后端
 [soruce, terminal]
 ----
+mkdir work
+cd work
 git clone https://github.com/freecoinx/awesome-digital-human-live2d.git
 cd awesome-digital-human-live2d
 # 初始化一个 uv 项目
@@ -58,6 +60,7 @@ pnpm run dev # 如果没有dev配置文件，直接pnpn run start
 === 用 uv 创建项目与引用
 [soruce, terminal]
 ----
+cd ~/work
 # 用 uv 创建两个项目
 uv init aa
 uv init bb
@@ -68,7 +71,7 @@ vi aatest.py
 def testaa():
     print("aaa testaa")
 
-# 在bb中引入aaa包
+# 切换到bb目录，在bb中引入aaa包
 vi main.py
 
 from aaa.aatest import testaa
@@ -89,11 +92,33 @@ uv pip install -e "../aa"
 #运行，可以看到testaa()的输出
 uv run python main.py
 ----
+项目结构：
+[source,tree]
+----
+work/
+├── aa/
+│   ├── aaa/
+│   │   ├── __init__.py
+│   │   └── aatest.py
+│   └── pyproject.toml
+└── bb/
+    ├── bb/
+    │   └── __init__.py
+    ├── main.py
+    └── pyproject.toml
 
+# 注意aa项目下aaa包中一定要加上__init__.py
+----
+
+=== ADH引用外部agent
 [soruce, terminal]
 ----
+cd ~/work
 uv init adh_ai_agent
+git clone https://gitee.com/mozilla88/adh_agent_tutorial.git
 cd adh_ai_agent
+# lesson_03是一个关于24点的agent
+cp ~/work/adh_agent_tutorial/lesson_03/adh_ai_agent/*.py .
 
 # 编辑 pyproject.toml
 [[tool.uv.index]]
@@ -107,13 +132,13 @@ build-backend = "setuptools.build_meta"
 # 添加依赖
 uv add openai-agents
 
-mkdir adh_ai_agent
-cd adh_ai_agent
-vi my_agent.py
+# 将adh_ai_agent添加到awesome-digital-human-live2d
+uv add ../adh_ai_agent --dev
+uv pip install -e "../adh_ai_agent"
 
-def test_hello():
-    print("Hello from adh-ai-agent!")
-
+# configs/agents 子目录中为 OutsideAgent 创建一个配置文件 outsideAgent.yaml
+# adh_ai_agent的play_24_points_game_v2.py 可以修改模型的apikey和url
+# 配置完成后，切换到awesome-digital-human-live2d，uv run python main.py,就可以调用外部agent，测试24点
 ----
 
 
